@@ -1,11 +1,9 @@
 version: '2'
 services:
   nginx:
-    image: nginx:1.11.8-alpine
+    image: hometask-nginx
     volumes:
       - ./index.php:/var/www/html/index.php
-      #- ./util:/etc/nginx
-      - ./util/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "8081:80"
     networks: 
@@ -14,8 +12,7 @@ services:
       - php
 
   php:
-    build:
-      context: ./app
+    image: hometask-php
     networks: 
       - jenkins_nw
 
