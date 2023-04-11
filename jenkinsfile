@@ -10,7 +10,9 @@ pipeline {
                 }
             }  
             steps {
-                script {             
+                script {     
+                    sh 'docker build -t hometask-php .'
+                    sh 'docker build -t hometask-nginx -f Dockerfile.nginx .'        
                     sh 'docker compose up --build -d '      
                 }
             }
