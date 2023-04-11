@@ -4,7 +4,8 @@ services:
     image: nginx:1.11.8-alpine
     volumes:
       - ./index.php:/var/www/html/index.php
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./util:/etc/nginx
+      - ./util/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "8081:80"
     networks: 
