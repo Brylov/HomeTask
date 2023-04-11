@@ -63,14 +63,18 @@ pipeline {
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {
                         //Calculate the future tag if exist tags in ecr else use the default first tag 1.0.0   
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g' |tr \".\" \" \" | awk ' { print \$1 \".\" \$2 \".\" \$3+1 } '", returnStdout: true).trim()               
-                        docker.withRegistry('https://644435390668.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:AWS_Cred_Private') {
+                        docker.withRegistry('https://587447957359.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:AWS_Cred_Private') {
                             if (tag != ""){
                                 app = docker.build("hometask")
                                 app.push("${tag}")
+                                nginx = docker.build("hometask-nginx", "-f Dockerfile.nginx .")
+                                nginx.push("${tag}")
                             }
                             else{
                                 app = docker.build("hometask")
                                 app.push("1.0.0")
+                                nginx = docker.build("hometask-nginx", "-f Dockerfile.nginx .")
+                                nginx.push("1.0.0")
                             }                      
                         }
                     }
