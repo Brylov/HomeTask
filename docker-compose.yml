@@ -3,7 +3,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      # - ./nginx.conf:/etc/nginx/nginx.conf
       - ./index.php:/var/www/html/index.php
     ports:
       - "8081:80"
