@@ -1,0 +1,21 @@
+php:
+  name: hometask-php
+  image:
+    registry: 587447957359.dkr.ecr.us-east-1.amazonaws.com
+    repository: hometask
+    tag: 1.0.2
+  imagepullsecret: us-east-1-ecr-registry
+  service:
+    type: ClusterIP
+    port: 9000
+
+nginx:
+  name: hometask-nginx
+  image:
+    registry: 587447957359.dkr.ecr.us-east-1.amazonaws.com
+    repository: hometask-nginx
+    tag: 1.0.2
+  imagepullsecret: us-east-1-ecr-registry
+  service:
+    type: NodePort
+    port: 80

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.nginx.name }}
+  name: {{ .Values.nginx.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.nginx.name }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nginx.name }}
+    spec:
+      containers:
+        - name: {{ .Values.nginx.name }}
+          image: {{ template "nginx.image" . }}
+          ports:
+            - containerPort: {{ .Values.nginx.service.port }}
+          resources: {}
+          volumeMounts:
+          - name: hometask-nginx-cm
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
+      volumes:
+      # https://medium.com/swlh/quick-fix-mounting-a-configmap-to-an-existing-volume-in-kubernetes-using-rancher-d01c472a10ad
+      - configMap:
+          name: hometask-nginx-cm
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+        name: hometask-nginx-cm     

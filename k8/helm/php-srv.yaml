@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.php.name }}
+  name: hometask-php
+spec:
+  ports:
+    - name: "http"
+      port: {{ .Values.php.service.port }}
+      targetPort: {{ .Values.php.service.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Values.php.name }}
+  type: {{ .Values.php.service.type }}

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.php.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.php.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.php.name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.php.imagepullsecret }}
+      containers:
+        - name: {{ .Values.php.name }}
+          image: {{ template "php.image" . }}
+
+          ports:
+            - containerPort: 9000

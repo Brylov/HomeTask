@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hometask-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hometask-nginx
+  template:
+    metadata:
+      labels:
+        app: hometask-nginx
+    spec:
+      imagePullSecrets:
+        - name: us-east-1-ecr-registry
+      containers:
+        - name: hometask-nginx
+          image: 587447957359.dkr.ecr.us-east-1.amazonaws.com/hometask-nginx:1.0.2
+          ports:
+            - containerPort: 80
+          volumeMounts:
+          - name: hometask-nginx-cm
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
+      volumes:
+      # https://medium.com/swlh/quick-fix-mounting-a-configmap-to-an-existing-volume-in-kubernetes-using-rancher-d01c472a10ad
+      - configMap:
+          name: hometask-nginx-cm
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+        name: hometask-nginx-cm

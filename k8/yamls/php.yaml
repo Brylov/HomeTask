@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hometask-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hometask-php
+  template:
+    metadata:
+      labels:
+        app: hometask-php
+    spec:
+      imagePullSecrets:
+        - name: us-east-1-ecr-registry
+      containers:
+        - name: hometask-php
+          image: 587447957359.dkr.ecr.us-east-1.amazonaws.com/hometask:1.0.2
+
+          ports:
+            - containerPort: 9000

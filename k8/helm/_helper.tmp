@@ -1,0 +1,29 @@
+{{/* vim: set filetype=mustache: */}}
+
+{{/*
+Return the proper nginx image name
+*/}}
+{{- define "php.image" -}}
+{{- $registryName := .Values.php.image.registry -}}
+{{- $repositoryName := .Values.php.image.repository -}}
+{{- $tag := .Values.php.image.tag | toString -}}
+{{- if $registryName -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- else -}}
+    {{- printf "%s:%s" $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper nginx image name
+*/}}
+{{- define "nginx.image" -}}
+{{- $registryName := .Values.nginx.image.registry -}}
+{{- $repositoryName := .Values.nginx.image.repository -}}
+{{- $tag := .Values.nginx.image.tag | toString -}}
+{{- if $registryName -}}
+    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- else -}}
+    {{- printf "%s:%s" $repositoryName $tag -}}
+{{- end -}}
+{{- end -}}
