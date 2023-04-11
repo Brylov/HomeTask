@@ -11,7 +11,7 @@ pipeline {
             }  
             steps {
                 script {             
-                    sh 'docker-compose up -d '      
+                    sh 'docker-compose up --build -d '      
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
                         sh """
                             counter=0
                             while [ "\$counter" -le 20 ]; do
-                            check=`curl -LI hometask-nginx:80 --connect-timeout 5 -o /dev/null -w '%{http_code}\n' -s || true`
+                            check=`curl -LI nginx:80 --connect-timeout 5 -o /dev/null -w '%{http_code}\n' -s || true`
                             if [ \$check -eq "200" ]; then 
                                 echo "e2e finished successfully"
                                 docker-compose down 
@@ -53,16 +53,16 @@ pipeline {
             }
             steps{
                 script{
-                    withAWS(credentials:'AWS_Cred_Private', region: 'us-west-1') {
+                    withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {
                         //Calculate the future tag if exist tags in ecr else use the default first tag 1.0.0   
-                        tag = sh (script: "aws ecr list-images --repository-name Hometask --filter --region us-west-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g' |tr \".\" \" \" | awk ' { print \$1 \".\" \$2 \".\" \$3+1 } '", returnStdout: true).trim()               
-                        docker.withRegistry('https://644435390668.dkr.ecr.us-west-1.amazonaws.com', 'ecr:us-west-1:AWS_Cred_Private') {
+                        tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g' |tr \".\" \" \" | awk ' { print \$1 \".\" \$2 \".\" \$3+1 } '", returnStdout: true).trim()               
+                        docker.withRegistry('https://644435390668.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:AWS_Cred_Private') {
                             if (tag != ""){
-                                app = docker.build("Hometask")
+                                app = docker.build("hometask")
                                 app.push("${tag}")
                             }
                             else{
-                                app = docker.build("Hometask")
+                                app = docker.build("hometask")
                                 app.push("1.0.0")
                             }                      
                         }
@@ -79,9 +79,9 @@ pipeline {
             }
             steps{
                 script{    
-                    withAWS(credentials:'AWS_Cred_Private', region: 'us-west-1') {  
-                        tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-west-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
-                        withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'portfolio-github-cred', usernameVariable: 'username', passwordVariable: 'password']]){	
+                    withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {  
+                        tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask_github_cred', usernameVariable: 'username', passwordVariable: 'password']]){	
                             sh """
                                 git clean -f -x
                                 git tag -a ${tag} -m "version ${tag}"
@@ -95,10 +95,10 @@ pipeline {
         // stage('helm chart update'){         
         //     steps{
         //         script{
-        //             withAWS(credentials:'AWS_Cred', region: 'us-west-1') {      
-        //                 tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-west-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
+        //             withAWS(credentials:'AWS_Cred', region: 'us-east-1') {      
+        //                 tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
         //                 withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask-github-cred', usernameVariable: 'username', passwordVariable: 'password']]){
-        //                     git url:"https://github.com/Brylov/ToDo-List-app-helm-chart", branch: "main", credentialsId: 'portfolio-github-cred' 
+        //                     git url:"https://github.com/Brylov/ToDo-List-app-helm-chart", branch: "main", credentialsId: 'hometask_github_cred' 
         //                     sh """yq -i '.flaskapp.image.tag = "${tag}"' helm/prod-values.yaml"""
         //                     sh """yq -i '.nginx.image.tag = "${tag}"' helm/prod-values.yaml"""
         //                     sh """
