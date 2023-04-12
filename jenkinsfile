@@ -110,26 +110,15 @@ pipeline {
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
-<<<<<<< HEAD
-                        withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask-github-cred', usernameVariable: 'username', passwordVariable: 'password']]){
-                            git url:"https://github.com/Brylov/HomeTask", branch: "main", credentialsId: 'hometask_github_cred' 
-                            sh """yq -i '.flaskapp.image.tag = "${tag}"' helm/prod-values.yaml"""
-                            sh """yq -i '.nginx.image.tag = "${tag}"' helm/prod-values.yaml"""
-                            sh """
-                                    git add .
-                                    git commit -m "image update version -- new version -- ${tag} #jenkins"
-                                    git push https://$username:$password@github.com/Brylov/HomeTask                         
-=======
                         withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask_github_cred', usernameVariable: 'username', passwordVariable: 'password']]){
                             git url:"https://github.com/Brylov/HomeTask.git", branch: "main", credentialsId: 'hometask_github_cred'
                             sh """
-                                git clean -f -x
+        
                                 git merge dev
                                 yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml
                                 yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml
                                 git commit -m "image update version -- new version -- ${tag} #jenkins"
                                 git push https://$username:$password@github.com/Brylov/HomeTask.git                         
->>>>>>> dev
                             """
                             // sh """yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml"""
                             // sh """yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml"""
