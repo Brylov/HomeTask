@@ -15,8 +15,7 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.php.imagepullsecret }}
       containers:
-        - name: {{} .Values.php.name }}
+        - name: {{ .Values.php.name }}
           image: {{ template "php.image" . }}
-
           ports:
             - containerPort: 9000
