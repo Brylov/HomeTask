@@ -150,7 +150,7 @@ pipeline {
                         withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask_github_cred', usernameVariable: 'username', passwordVariable: 'password']]){
                             git url:"https://github.com/Brylov/HomeTask.git", branch: "main", credentialsId: 'hometask_github_cred'
                             sh """                               
-                                git merge --no-ff 'origin/dev' -m "image update version -- new version -- ${tag} #jenkins
+                                git merge --no-ff 'origin/dev' -m "image update version -- new version -- ${tag} #jenkins"
                                 git push --force https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
                         }                        
