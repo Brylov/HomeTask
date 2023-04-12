@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: {{ .Values.php.name }}
-  name: hometask-php
+  name: {{ .Values.php.name }}
 spec:
   ports:
     - name: "http"
