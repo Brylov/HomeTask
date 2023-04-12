@@ -10,7 +10,7 @@ pipeline {
                 }
             }  
             steps {
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
                 script {     
                     sh 'docker build -t hometask-php .'
                     sh 'docker build -t hometask-nginx -f Dockerfile.nginx .'        
@@ -31,7 +31,7 @@ pipeline {
                 }
             }
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
                 script{
                         sh """
                             counter=0
@@ -61,7 +61,7 @@ pipeline {
                 }
             }
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {
                         //Calculate the future tag if exist tags in ecr else use the default first tag 1.0.0   
@@ -93,7 +93,7 @@ pipeline {
                 }
             }
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
                 script{    
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {  
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
@@ -115,7 +115,7 @@ pipeline {
                 }
             }        
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
@@ -142,7 +142,7 @@ pipeline {
                 }
             }      
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
                 input message: 'Do you want to deploy this to production?', ok: 'Deploy', submitter: 'user1'
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
