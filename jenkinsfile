@@ -114,7 +114,6 @@ pipeline {
                             git url:"https://github.com/Brylov/HomeTask.git", branch: "main", credentialsId: 'hometask_github_cred'
                             sh """
                                 git clean -f -x
-                                git checkout origin main
                                 git merge dev
                                 git push https://$username:$password@github.com/Brylov/HomeTask.git                         
                             """
