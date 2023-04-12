@@ -31,7 +31,7 @@ spec:
       volumes:
       # https://medium.com/swlh/quick-fix-mounting-a-configmap-to-an-existing-volume-in-kubernetes-using-rancher-d01c472a10ad
       - configMap:
-          name: hometask-nginx-cm
+          name: {{ .Values.nginx.config }}
           items:
           - key: nginx.conf
             path: nginx.conf

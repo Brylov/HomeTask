@@ -11,6 +11,7 @@ php:
     port: 9000
 nginx:
   name: hometask-nginx-dev
+  config: hometask-nginx-cm-dev
   image:
     registry: 587447957359.dkr.ecr.us-east-1.amazonaws.com
     repository: hometask-nginx
