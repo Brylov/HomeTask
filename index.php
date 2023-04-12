@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Hello Home Task</title>
+	<title>Hello Home Task Demo</title>
 </head>
 <body>
 	<h1>Hello Home Task!</h1>
