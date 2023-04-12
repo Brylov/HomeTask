@@ -104,13 +104,18 @@ pipeline {
                 }
             }
         }
-        stage('helm chart update'){         
+        stage('helm chart update'){ 
+            when {
+                anyOf {
+                    branch 'dev'
+                }        
             steps{
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
                         withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask_github_cred', usernameVariable: 'username', passwordVariable: 'password']]){
                             sh """
+                                git clean -f -x
                                 yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml
                                 yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml
                                 git add .
@@ -123,7 +128,7 @@ pipeline {
                 }
             }
         }
-        stage('helm chart update && push to main ** PR **'){         
+        stage('push to main ** Requires Approval **'){         
             steps{
                 input message: 'Do you want to deploy this to production?', ok: 'Deploy', submitter: 'user1'
                 script{
@@ -133,10 +138,10 @@ pipeline {
                             git url:"https://github.com/Brylov/HomeTask.git", branch: "main", credentialsId: 'hometask_github_cred'
                             sh """
                                 git merge --no-ff 'origin/dev' -m "Update Prod"
-                                yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml
-                                yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml
-                                git add .
-                                git commit -m "image update version -- new version -- ${tag} #jenkins"
+                                // yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml
+                                // yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml
+                                // git add .
+                                // git commit -m "image update version -- new version -- ${tag} #jenkins"
                                 git push --force https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
                         }
