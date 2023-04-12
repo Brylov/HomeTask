@@ -1,6 +1,6 @@
 env: prod
 php:
-  name: hometask-php
+  name: hometask-php-prod
   image:
     registry: 587447957359.dkr.ecr.us-east-1.amazonaws.com
     repository: hometask
@@ -10,7 +10,7 @@ php:
     type: ClusterIP
     port: 9000
 nginx:
-  name: hometask-nginx
+  name: hometask-nginx-prod
   image:
     registry: 587447957359.dkr.ecr.us-east-1.amazonaws.com
     repository: hometask-nginx
