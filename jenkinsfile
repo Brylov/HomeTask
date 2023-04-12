@@ -130,7 +130,12 @@ pipeline {
                 }
             }
         }
-        stage('push to main ** Requires Approval **'){         
+        stage('push to main ** Requires Approval **'){    
+            when {
+                anyOf {
+                    branch 'dev'
+                }
+            }      
             steps{
                 input message: 'Do you want to deploy this to production?', ok: 'Deploy', submitter: 'user1'
                 script{
