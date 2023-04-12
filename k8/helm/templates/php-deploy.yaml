@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.php.name }}
+  name: {{ .Values.php.name }}-{{ .Values.env }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.php.name }}
+      app: {{ .Values.php.name }}-{{ .Values.env }}
   template:
     metadata:
       labels:
-        app: {{ .Values.php.name }}
+        app: {{ .Values.php.name }}-{{ .Values.env }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.php.imagepullsecret }}
       containers:
-        - name: {{ .Values.php.name }}
+        - name: { .Values.php.name }}-{{ .Values.env }}
           image: {{ template "php.image" . }}
 
           ports:
