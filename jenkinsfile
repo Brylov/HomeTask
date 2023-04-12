@@ -147,8 +147,7 @@ pipeline {
                                 git merge --no-ff 'origin/dev' -m "image update version -- new version -- ${tag} #jenkins
                                 git push --force https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
-                        }
-                        
+                        }                        
                     }
                 }
             }
