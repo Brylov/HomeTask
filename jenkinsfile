@@ -12,7 +12,7 @@ pipeline {
             steps {
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
                 script {     
-                    sh 'docker build -t hometask-php .'
+                    sh 'docker build -t hometask .'
                     sh 'docker build -t hometask-nginx -f Dockerfile.nginx .'        
                     sh 'docker compose up --build -d '      
                 }
@@ -74,7 +74,7 @@ pipeline {
                                 nginx.push("${tag}")
                             }
                             else{
-                                app = docker.build("hometask")
+                                app = docker.build("hometask-php")
                                 app.push("1.0.0")
                                 nginx = docker.build("hometask-nginx", "-f Dockerfile.nginx .")
                                 nginx.push("1.0.0")
