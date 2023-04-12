@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: {{ .Values.nginx.name }}
-  name: {{ .Values.nginx.name }}
+    app: {{ .Values.nginx.name }}-{{ .Values.env }}
+  name: {{ .Values.nginx.name }}-{{ .Values.env }}
 spec:
   replicas: 1
   selector:
