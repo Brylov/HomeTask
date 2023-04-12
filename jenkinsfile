@@ -118,7 +118,7 @@ pipeline {
                                 yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml
                                 git add .
                                 git commit -m "image update version -- new version -- ${tag} #jenkins"
-                                git push https://$username:$password@github.com/Brylov/HomeTask.git                
+                                git push --force https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
                             // sh """yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml"""
                             // sh """yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml"""
