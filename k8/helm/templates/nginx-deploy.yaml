@@ -4,6 +4,7 @@ metadata:
   labels:
     app: {{ .Values.nginx.name }}
   name: {{ .Values.nginx.name }}
+  namespace: {{ .Values.env }}
 spec:
   replicas: 1
   selector:

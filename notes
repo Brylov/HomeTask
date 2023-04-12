@@ -8,6 +8,11 @@ What is Working:
 - argocd with 2 apps that connect to the git repo, 1 for dev, 1 for prod 
 - full helm chart with dynamic nginx-configmap, nginx-deploy, nginx-svc, php-deploy, php-svc, and default values for dev, custom values for prod
 
+
+ToDo:
+- namespaceing for dev and prod
+
+
 Known Bugs / Bad practices:
 - changing nginx conf in docker image only works on pipeline, must be changed in helm chart configmap 
 - no tls/ssl on argocd and nginx
