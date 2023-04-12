@@ -2,7 +2,7 @@ pipeline {
     options {
         skipDefaultCheckout false
     }
-    agent any 
+    agent any
 
     stages {
 
@@ -132,8 +132,7 @@ pipeline {
                                 git commit -m "image update version -- new version -- ${tag} [ci skip]."
                                 git push https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
-                        }
-                        
+                        }                        
                     }
                 }
             }
