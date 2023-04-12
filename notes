@@ -16,6 +16,7 @@ Known Bugs / Bad practices:
 - no dns names on apps, url with ip address
 - docker images not cleaned after docker compose down on pipeline
 - no IAM rules on jenkins ec2
+- nginx refusing to serv index.php tried with index index.php on the /var/www/html where the index.php exist. fastcgi_index also didnt work.
 
 Need to Check:
 - aws ec2 ssh gives an error after a few second of connection "client_loop; send disconnect; Broken pipe"
