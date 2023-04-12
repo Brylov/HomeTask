@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hometask
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: k8/helm
+    repoURL: 'https://github.com/Brylov/portfolio-infra-argo.git'
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      selfHeal: true
