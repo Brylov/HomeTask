@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hometask
+  name: hometask-prod
   namespace: argocd
 spec:
   destination:
     name: ''
-    namespace: default
+    namespace: prod
     server: 'https://kubernetes.default.svc'
   source:
     path: k8/helm

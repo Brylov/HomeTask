@@ -1,1 +1,37 @@
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+get argo pass - kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+
+What is Working:
+- Jenkins on aws ec2
+- full CI pipeline; build, text, publish, tag
+- full CD; push to dev (after changing tags with auto incrementing system), push to main (**Required Approval**)
+- full working minikube with aws connection, pulling from ecr with ImagePullSecret, argocd, and tunnel (Loadbalancing for external IP)
+- argocd with 2 apps that connect to the git repo, 1 for dev, 1 for prod 
+- full helm chart with dynamic nginx-configmap, nginx-deploy, nginx-svc, php-deploy, php-svc, and default values for dev, custom values for prod
+
+
+ToDo:
+- namespaceing for dev and prod
+
+
+Known Bugs / Bad practices:
+- changing nginx conf in docker image only works on pipeline, must be changed in helm chart configmap 
+- no tls/ssl on argocd and nginx
+- webhook is currently disabled on github-jenkins ,infinty loop on push , scm skip NOT WORKING.
+- no webhook on github-argocd, https is requirde to make it work.
+- no dns names on apps, url with ip address
+- docker images not cleaned after docker compose down on pipeline
+- no IAM rules on jenkins ec2
+- nginx refusing to serv index.php tried with index index.php on the /var/www/html where the index.php exist. fastcgi_index also didnt work.
+
+Need to Check:
+- aws ec2 ssh gives an error after a few second of connection "client_loop; send disconnect; Broken pipe"
+
+things that took time to figure:
+- synchronize between ecr to minikube
+- pipeline infinty loop - NOT fixed
+- pipeline approval check
+- dynamic helm chart for both prod and dev without files collision
+
+
+
+

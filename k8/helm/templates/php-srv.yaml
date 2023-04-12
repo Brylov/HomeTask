@@ -4,6 +4,7 @@ metadata:
   labels:
     app: {{ .Values.php.name }}
   name: {{ .Values.php.name }}
+  namespace: {{ .Values.env }}
 spec:
   ports:
     - name: "http"
