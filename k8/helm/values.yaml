@@ -4,17 +4,18 @@ php:
   image:
     registry: 587447957359.dkr.ecr.us-east-1.amazonaws.com
     repository: hometask
-    tag: 1.0.49
+    tag: 1.0.51
   imagepullsecret: us-east-1-ecr-registry
   service:
     type: ClusterIP
     port: 9000
 nginx:
   name: hometask-nginx-dev
+  config: hometask-nginx-cm-dev
   image:
     registry: 587447957359.dkr.ecr.us-east-1.amazonaws.com
     repository: hometask-nginx
-    tag: 1.0.49
+    tag: 1.0.51
   imagepullsecret: us-east-1-ecr-registry
   service:
     type: LoadBalancer
