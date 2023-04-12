@@ -117,7 +117,7 @@ pipeline {
                             sh """
                                     git add .
                                     git commit -m "image update version -- new version -- ${tag} #jenkins"
-                                    git push https://$username:$password@github.com/Brylov/HomeTask.git                          
+                                    git push https://$username:$password@github.com/Brylov/HomeTask.git --tag                         
                             """
                         }
                         
