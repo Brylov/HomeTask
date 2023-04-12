@@ -10,9 +10,9 @@ pipeline {
                 }
             }  
             steps {
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script {     
-                    sh 'docker build -t hometask-php .'
+                    sh 'docker build -t hometask .'
                     sh 'docker build -t hometask-nginx -f Dockerfile.nginx .'        
                     sh 'docker compose up --build -d '      
                 }
@@ -31,7 +31,7 @@ pipeline {
                 }
             }
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{
                         sh """
                             counter=0
@@ -61,7 +61,7 @@ pipeline {
                 }
             }
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {
                         //Calculate the future tag if exist tags in ecr else use the default first tag 1.0.0   
@@ -74,7 +74,7 @@ pipeline {
                                 nginx.push("${tag}")
                             }
                             else{
-                                app = docker.build("hometask")
+                                app = docker.build("hometask-php")
                                 app.push("1.0.0")
                                 nginx = docker.build("hometask-nginx", "-f Dockerfile.nginx .")
                                 nginx.push("1.0.0")
@@ -93,7 +93,7 @@ pipeline {
                 }
             }
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{    
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {  
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
@@ -115,7 +115,7 @@ pipeline {
                 }
             }        
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
@@ -126,7 +126,7 @@ pipeline {
                                 yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml
                                 yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml
                                 git add .
-                                git commit -m "image update version -- new version -- ${tag} #jenkins"
+                                git commit -m "image update version -- new version -- ${tag} [ci-skip]"
                                 git push https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
                         }
@@ -142,7 +142,7 @@ pipeline {
                 }
             }      
             steps{
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*|.*\\#jenkins.*')
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 input message: 'Do you want to deploy this to production?', ok: 'Deploy', submitter: 'user1'
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
@@ -150,7 +150,7 @@ pipeline {
                         withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask_github_cred', usernameVariable: 'username', passwordVariable: 'password']]){
                             git url:"https://github.com/Brylov/HomeTask.git", branch: "main", credentialsId: 'hometask_github_cred'
                             sh """                               
-                                git merge --no-ff 'origin/dev' -m "image update version -- new version -- ${tag} #jenkins"
+                                git merge --no-ff 'origin/dev' -m "image update version -- new version -- ${tag} [ci-skip]"
                                 git push --force https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
                         }                        

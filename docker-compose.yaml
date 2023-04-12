@@ -12,7 +12,7 @@ services:
       - php
 
   php:
-    image: hometask-php
+    image: hometask
     networks: 
       - jenkins_nw
 
