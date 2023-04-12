@@ -108,7 +108,8 @@ pipeline {
             when {
                 anyOf {
                     branch 'dev'
-                }        
+                }
+            }        
             steps{
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
