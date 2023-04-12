@@ -8,17 +8,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.nginx.name }}
+      app: {{ .Values.nginx.name }}-{{ .Values.env }}
   strategy: {}
   template:
     metadata:
       labels:
-        app: {{ .Values.nginx.name }}
+        app: {{ .Values.nginx.name }}-{{ .Values.env }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.nginx.imagepullsecret }}
       containers:
-        - name: {{ .Values.nginx.name }}
+        - name: {{ .Values.nginx.name }}-{{ .Values.env }}
           image: {{ template "nginx.image" . }}
           ports:
             - containerPort: {{ .Values.nginx.service.port }}

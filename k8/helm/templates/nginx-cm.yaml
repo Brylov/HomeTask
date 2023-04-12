@@ -1,7 +1,7 @@
 apiVersion: v1  
 kind: ConfigMap  
 metadata:  
-  name: hometask-nginx-cm
+  name: hometask-nginx-cm-{{ .Values.env }}
 data:  
   nginx.conf: |
     events {}
