@@ -107,6 +107,7 @@ pipeline {
         
         stage('helm chart update && push to main ** PR **'){         
             steps{
+                input message: 'Do you want to deploy this to production?', ok: 'Deploy', submitter: 'user1'
                 script{
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
