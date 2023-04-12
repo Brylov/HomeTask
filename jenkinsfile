@@ -111,9 +111,9 @@ pipeline {
                     withAWS(credentials:'AWS_Cred_Private', region: 'us-east-1') {      
                         tag = sh (script: "aws ecr list-images --repository-name hometask --filter --region us-east-1 tagStatus=TAGGED | grep imageTag | awk ' { print \$2 } ' |sort -V -r | head -1 | sed 's/\"//g'", returnStdout: true).trim()
                         withCredentials([[$class: 'UsernamePasswordMultiBinding' , credentialsId: 'hometask-github-cred', usernameVariable: 'username', passwordVariable: 'password']]){
-                            git url:"https://github.com/Brylov/HomeTask.gi", branch: "main", credentialsId: 'hometask_github_cred' 
-                            sh """yq -i '.flaskapp.image.tag = "${tag}"' helm/prod-values.yaml"""
-                            sh """yq -i '.nginx.image.tag = "${tag}"' helm/prod-values.yaml"""
+                            git url:"https://github.com/Brylov/HomeTask.gi", branch: "dev", credentialsId: 'hometask_github_cred' 
+                            sh """yq -i '.php.image.tag = "${tag}"' k8/helm/values.yaml"""
+                            sh """yq -i '.nginx.image.tag = "${tag}"' k8/helm/values.yaml"""
                             sh """
                                     git add .
                                     git commit -m "image update version -- new version -- ${tag} #jenkins"
