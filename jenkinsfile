@@ -155,6 +155,7 @@ pipeline {
                                 git merge --no-ff 'origin/dev' -m "image update version -- new version -- ${tag} [ci skip]."
                                 yq -i '.nginx.image.tag = "${tag}"' k8/helm/prod-values.yaml
                                 yq -i '.php.image.tag = "${tag}"' k8/helm/prod-values.yaml
+                                git add .
                                 git commit -m "image update version -- new version -- ${tag} [ci skip]."
                                 git push --force https://$username:$password@github.com/Brylov/HomeTask.git                
                             """
