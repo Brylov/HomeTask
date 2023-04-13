@@ -5,13 +5,7 @@ pipeline {
     agent any
 
     stages {
-
         stage('build the app') { 
-            when {
-                anyOf {
-                    branch 'dev'
-                }
-            }  
             steps {
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script {     
@@ -28,11 +22,6 @@ pipeline {
         }
 
         stage('e2e tests'){
-            when {
-                anyOf {
-                    branch 'dev'
-                }
-            }
             steps{
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{
@@ -58,11 +47,6 @@ pipeline {
         }
 
         stage("publish to ecr"){
-            when {
-                anyOf {
-                    branch 'dev'
-                }
-            }
             steps{
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{
@@ -86,15 +70,9 @@ pipeline {
                     }
                 }
             }
-
         } 
           
         stage('tag new version'){
-            when {
-                anyOf {
-                    branch 'dev'
-                }
-            }
             steps{
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{    
@@ -111,12 +89,7 @@ pipeline {
                 }
             }
         }
-        stage('helm chart update'){ 
-            when {
-                anyOf {
-                    branch 'dev'
-                }
-            }        
+        stage('helm chart update'){        
             steps{
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 script{
@@ -137,12 +110,7 @@ pipeline {
                 }
             }
         }
-        stage('push to main ** Requires Approval **'){    
-            when {
-                anyOf {
-                    branch 'dev'
-                }
-            }      
+        stage('push to main ** Requires Approval **'){        
             steps{
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 input message: 'Do you want to deploy this to production?', ok: 'Deploy', submitter: 'user1'
